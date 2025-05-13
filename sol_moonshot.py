@@ -5,8 +5,8 @@ import smtplib
 import pandas as pd
 import numpy as np
 from datetime import datetime, timedelta
-from influxdb_client import InfluxDBClient
-from influxdb_client.client.query_api import QueryApi
+from influxdb_client import InfluxDBClient, Point, WritePrecision
+from influxdb_client.client.write_api import SYNCHRONOUS
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
