@@ -10,11 +10,6 @@ import numpy as np
 from datetime import datetime, timedelta
 from influxdb_client import InfluxDBClient, Point, WritePrecision
 from influxdb_client.client.write_api import SYNCHRONOUS
-from solders.pubkey import Pubkey
-from solders.rpc.requests import GetRecentBlockhash, GetProgramAccounts
-from solders.rpc.responses import GetRecentBlockhashResp, GetProgramAccountsResp
-from solders.rpc.config import RpcProgramAccountsConfig
-from solders.rpc.filters import Memcmp, RpcFilter
 import json
 from email.mime.text import MIMEText
 from dotenv import load_dotenv
@@ -277,28 +272,25 @@ async def fetch_cfgi_index(session):
 async def fetch_helius_whale_activity(coin_address, session):
     for attempt in range(3):
         try:
-            url = f"https://api.helius.xyz/v0/transactions?api-key={HELIUS_API_KEY}"
-            payload = {
-                "accounts": [coin_address],
-                "before": None,
-                "until": None,
-                "limit": 100
-            }
-            async with session.post(url, json=payload, timeout=10) as response:
+            url = f"https://api.helius.xyz/v0/addresses/{coin_address}/transactions?api-key={HELIUS_API_KEY}"
+            async with session.get(url, timeout=10) as response:
                 response.raise_for_status()
                 txs = await response.json()
                 large_txs = 0
                 cumulative_volume = 0
-                five_minutes_ago = (datetime.utcnow() - timedelta(minutes=5)).timestamp() * 1000
+                five_minutes_ago = (datetime.utcnow() - timedelta(minutes=5)).timestamp()
                 for tx in txs:
-                    timestamp = tx["timestamp"] * 1000
+                    # Check transaction timestamp
+                    timestamp = tx.get("timestamp", 0)
                     if timestamp < five_minutes_ago:
                         continue
-                    amount = tx.get("amount", 0) / 1e9  # Convert lamports to SOL
-                    usd_value = amount * 88.71  # SOL/USD price
-                    if usd_value > 50000:
-                        large_txs += 1
-                    cumulative_volume += usd_value
+                    # Check transaction type and amount
+                    if "fee" in tx:
+                        amount = tx.get("fee", 0) / 1e9  # Convert lamports to SOL
+                        usd_value = amount * 88.71  # SOL/USD price
+                        if usd_value > 50000:
+                            large_txs += 1
+                        cumulative_volume += usd_value
                 return {"large_txs": large_txs, "cumulative_volume": cumulative_volume}
         except Exception as e:
             wait_time = 5 * (2 ** attempt)
