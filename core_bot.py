@@ -136,18 +136,18 @@ async def fetch_market_data(exchanges, symbol="SOL/USD"):
                     market_data[symbol][ex_name] = {'price': 0.0, 'volume': 0.0, 'timestamp': datetime.utcnow().isoformat(), 'score': 0.5}
     return market_data
 
-# Target coins (preliminary list, expand to 50 in Step 3)
+# Target coins (updated list of valid Solana meme coins)
 target_coins = [
-    {"name": "POPCAT", "symbol": "POPCAT", "lunarcrush_symbol": "POPCAT", "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy4t9uu4bagryL7Y7"},
-    {"name": "MUSKIT", "symbol": "MUSKIT", "lunarcrush_symbol": "MUSKIT", "address": "placeholder_address"},
-    {"name": "Bonk", "symbol": "BONK", "lunarcrush_symbol": "BONK", "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"},
-    {"name": "Dogwifhat", "symbol": "WIF", "lunarcrush_symbol": "WIF", "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm"},
-    {"name": "Fartcoin", "symbol": "FARTCOIN", "lunarcrush_symbol": "FARTCOIN", "address": "placeholder_address"},
-    {"name": "All Will Retire", "symbol": "AWR", "lunarcrush_symbol": "AWR", "address": "placeholder_address"},
-    {"name": "Book of Meme", "symbol": "BOME", "lunarcrush_symbol": "BOME", "address": "ukHH6c7mMyiWCf1bW5VhpMXk7gU5S1Y4A1kA2kYvNZ"},
-    {"name": "Myro", "symbol": "MYRO", "lunarcrush_symbol": "MYRO", "address": "HhJpBhRRJ5X8xH3F2qUkE5qExORtF3vM7ZhRJrjnuoC"},
-    {"name": "Official Trump", "symbol": "TRUMP", "lunarcrush_symbol": "TRUMP", "address": "placeholder_address"},
-    {"name": "Peanut the Squirrel", "symbol": "PNUT", "lunarcrush_symbol": "PNUT", "address": "placeholder_address"},
+    {"name": "POPCAT", "symbol": "popcat", "lunarcrush_symbol": "POPCAT", "address": "7GCihgDB8fe6KNjn2MYtkzZcRjQy4t9uu4bagryL7Y7"},
+    {"name": "Bonk", "symbol": "bonk", "lunarcrush_symbol": "BONK", "address": "DezXAZ8z7PnrnRJjz3wXBoRgixCa6xjnB7YaB1pPB263"},
+    {"name": "Dogwifhat", "symbol": "wif", "lunarcrush_symbol": "WIF", "address": "EKpQGSJtjMFqKZ9KQanSqYXRcF8fBopzLHYxdM65zcjm"},
+    {"name": "Book of Meme", "symbol": "bome", "lunarcrush_symbol": "BOME", "address": "ukHH6c7mMyiWCf1bW5VhpMXk7gU5S1Y4A1kA2kYvNZ"},
+    {"name": "Myro", "symbol": "myro", "lunarcrush_symbol": "MYRO", "address": "HhJpBhRRJ5X8xH3F2qUkE5qExORtF3vM7ZhRJrjnuoC"},
+    {"name": "Wen", "symbol": "wen", "lunarcrush_symbol": "WEN", "address": "WENWENvqqNya429ubCdR81ZmD69brwQaaBAY6pREh4o"},
+    {"name": "Sillycat", "symbol": "silly", "lunarcrush_symbol": "SILLY", "address": "7EYnhQoR9tDoLtpyRJhFCSQ2hQ7o2hFXnJSeZPhuF6M"},
+    {"name": "Cat in a Dogs World", "symbol": "mew", "lunarcrush_symbol": "MEW", "address": "MEW1gQWJ3nEXg2qgERiKu7FAFj79PHvQVREQUzScPP5"},
+    {"name": "Ponke", "symbol": "ponke", "lunarcrush_symbol": "PONKE", "address": "5z3EqYQo9DqR5thv7XrHr8jWEN6xGQT8GL5bH8A6Qev"},
+    {"name": "Slothana", "symbol": "sloth", "lunarcrush_symbol": "SLOTH", "address": "26rbyuWLA1fSwh9sj5x5icrAJk5c3t2w9Xq3PXRb2gK"},
 ]
 
 # File paths for CSVs
@@ -367,7 +367,7 @@ async def fetch_coingecko_historical_data(coins, start_date, end_date, session):
                     logging.info(f"Historical data fetched for {coin['symbol']} on {date_str}")
                     break
                 except Exception as e:
-                    wait_time = 10 * (2 ** attempt)
+                    wait_time = 5 * (2 ** attempt)
                     logging.warning(f"Failed to fetch historical {coin['symbol']} on {date_str}: {str(e)}. Retrying in {wait_time}s...")
                     await asyncio.sleep(wait_time)
                     if attempt == 2:
@@ -380,7 +380,7 @@ async def fetch_coingecko_historical_data(coins, start_date, end_date, session):
                             'score': 0.5
                         })
             current_date += timedelta(days=1)
-            await asyncio.sleep(15)  # Rate limiting for CoinGecko
+            await asyncio.sleep(30)  # Increased delay to 30 seconds for rate limiting
     return coingecko_historical_data
 
 # Write data to InfluxDB

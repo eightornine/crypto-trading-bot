@@ -59,16 +59,16 @@ PAUSED_STATE_FILE = "/root/crypto-trading-bot/paused_state.txt"
 
 # Target coins (must match core_bot.py)
 target_coins = [
-    {"name": "POPCAT", "symbol": "POPCAT"},
-    {"name": "MUSKIT", "symbol": "MUSKIT"},
-    {"name": "Bonk", "symbol": "BONK"},
-    {"name": "Dogwifhat", "symbol": "WIF"},
-    {"name": "Fartcoin", "symbol": "FARTCOIN"},
-    {"name": "All Will Retire", "symbol": "AWR"},
-    {"name": "Book of Meme", "symbol": "BOME"},
-    {"name": "Myro", "symbol": "MYRO"},
-    {"name": "Official Trump", "symbol": "TRUMP"},
-    {"name": "Peanut the Squirrel", "symbol": "PNUT"},
+    {"name": "POPCAT", "symbol": "popcat"},
+    {"name": "Bonk", "symbol": "bonk"},
+    {"name": "Dogwifhat", "symbol": "wif"},
+    {"name": "Book of Meme", "symbol": "bome"},
+    {"name": "Myro", "symbol": "myro"},
+    {"name": "Wen", "symbol": "wen"},
+    {"name": "Sillycat", "symbol": "silly"},
+    {"name": "Cat in a Dogs World", "symbol": "mew"},
+    {"name": "Ponke", "symbol": "ponke"},
+    {"name": "Slothana", "symbol": "sloth"},
 ]
 
 # Global state
